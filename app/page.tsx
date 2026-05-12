@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 const employees: Record<string, { name: string; role: string }> = {
-  anis: { name: "Anis", role: "Conseiller Kost Groupe" },
+  anis: { name: "Anis Mokrane", role: "Directeur · Kost Groupe" },
 };
 
 function resolveEmployee(raw?: string | string[]) {
@@ -13,7 +13,7 @@ function resolveEmployee(raw?: string | string[]) {
   return {
     slug,
     name: known?.name ?? slug.charAt(0).toUpperCase() + slug.slice(1),
-    role: known?.role ?? "Conseiller Kost Groupe",
+    role: known?.role ?? "Conseiller · Kost Groupe",
     src: `/employees/${slug}.png`,
   };
 }

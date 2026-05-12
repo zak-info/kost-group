@@ -1,26 +1,122 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --kost-paper: #f1ead9;
+  --kost-paper-deep: #e6dec7;
+  --kost-ink: #0a1733;
+  --kost-ink-soft: #1e2a4a;
+  --kost-blue: #1e63d8;
+  --kost-blue-bright: #2f86ff;
+  --kost-copper: #b8623a;
+  --kost-stone: #8a7e63;
+  --kost-line: rgba(10, 23, 51, 0.14);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-paper: var(--kost-paper);
+  --color-ink: var(--kost-ink);
+  --color-blue: var(--kost-blue);
+  --color-copper: var(--kost-copper);
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+html,
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--kost-paper);
+  color: var(--kost-ink);
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
 }
+
+::selection {
+  background: var(--kost-ink);
+  color: var(--kost-paper);
+}
+
+/* Paper grain — subtle SVG noise */
+.paper-grain {
+  position: relative;
+  isolation: isolate;
+}
+.paper-grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.04 0 0 0 0 0.09 0 0 0 0 0.2 0 0 0 0.45 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  background-size: 220px 220px;
+}
+
+/* Marquee */
+@keyframes drift {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: drift 42s linear infinite;
+  width: max-content;
+}
+
+/* Entrance animations */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.anim-rise { animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.anim-fade { animation: fade 1.4s ease-out both; }
+.anim-scale { animation: scaleIn 1s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+
+/* Verified badge pulse */
+@keyframes pulse-ring {
+  0%   { box-shadow: 0 0 0 0 rgba(30, 99, 216, 0.45); }
+  70%  { box-shadow: 0 0 0 14px rgba(30, 99, 216, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(30, 99, 216, 0); }
+}
+.verified-pulse { animation: pulse-ring 2.4s ease-out infinite; }
+
+/* Rotating ring around profile */
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+.spin-slow { animation: spin-slow 60s linear infinite; }
+
+/* Contact card hover */
+.contact-card {
+  transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1),
+              border-color 0.3s ease,
+              background-color 0.3s ease;
+}
+.contact-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--kost-ink);
+  background-color: rgba(255, 255, 255, 0.5);
+}
+.contact-card:hover .contact-icon {
+  background: var(--kost-ink);
+  color: var(--kost-paper);
+}
+.contact-icon {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Pillar number hover */
+.pillar:hover .pillar-num {
+  color: var(--kost-blue);
+}
+.pillar-num {
+  transition: color 0.4s ease;
+}
+
+/* Hairline */
+.hairline { background: var(--kost-line); }
